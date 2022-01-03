@@ -4,14 +4,14 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
 on:
-  pull_request:
-    branches: [ master ]
-    paths:
-    - '**.txt' # only take action when *.txt files change
-  # push:
+  # pull_request:
   #   branches: [ master ]
   #   paths:
   #   - '**.txt' # only take action when *.txt files change
+  push:
+    branches: [ master ]
+    paths:
+    - '**.txt' # only take action when *.txt files change
   workflow_dispatch:
 
 jobs:
@@ -26,6 +26,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUB_CONTEXT"
       - name: Get changed files
         id: changes
         # Set outputs using the command.
