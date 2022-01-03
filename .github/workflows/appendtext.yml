@@ -9,7 +9,7 @@ on:
   #   paths:
   #   - '**.txt' # only take action when *.txt files change
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths:
     - '**.txt' # only take action when *.txt files change
   workflow_dispatch:
