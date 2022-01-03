@@ -18,8 +18,8 @@ jobs:
   changedfiles:
     runs-on: ubuntu-latest
     outputs:
-      all: ${{ steps.changes.outputs.all }}
-      txt: ${{ steps.changes.outputs.txt }}
+      all: ${{steps.changes.outputs.all}}
+      txt: ${{steps.changes.outputs.txt}}
     steps:
         # Make sure we have some code to diff.
       - name: Checkout repository
