@@ -4,10 +4,10 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
 on:
-  # pull_request:
-  #   branches: [ master ]
-  #   paths:
-  #   - '**.txt' # only take action when *.txt files change
+  pull_request:
+    branches: [ master ]
+    paths:
+    - '**.txt' # only take action when *.txt files change
   push:
     branches: [ master ]
     paths:
