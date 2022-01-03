@@ -1,0 +1,41 @@
+name: AppendText
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+on:
+  # pull_request:
+  #   branches: [ master ]
+  #   paths:
+  #   - '**.txt' # only take action when *.txt files change
+  push:
+    branches: [ main ]
+    paths:
+    - '**.txt' # only take action when *.txt files change
+  workflow_dispatch:
+
+jobs:
+  changedfiles:
+    runs-on: ubuntu-latest
+    outputs:
+      all: ${{ steps.changes.outputs.all}}
+      txt: ${{ steps.changes.outputs.txt}}
+    steps:
+        # Make sure we have some code to diff.
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Get changed files
+        id: changes
+        # Set outputs using the command.
+        run: |
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
+          echo "::set-output name=ts::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .txt$ | xargs)"
+  appendtext:
+    runs-on: ubuntu-latest
+    # require the first job to have ran
+    needs: changedfiles
+    # only run there are changed files
+    if: ${{needs.changedfiles.outputs.txt}}
+    steps:
+      - name: echo changed files
+        run: echo ${{needs.changedfiles.outputs.txt}}
