@@ -14,34 +14,21 @@ on:
     - '**.txt' # only take action when *.txt files change
   workflow_dispatch:
 
+# Alternate approach in https://dev.to/scienta/get-changed-files-in-github-actions-1p36
+
 jobs:
-  changedfiles:
-    runs-on: ubuntu-latest
-    outputs:
-      all: ${{steps.changes.outputs.all}}
-      txt: ${{steps.changes.outputs.txt}}
+  modifyfiles:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    name: Test changed-files
     steps:
-        # Make sure we have some code to diff.
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
       - name: Get changed files
-        id: changes
-        # Set outputs using the command.
+        id: changed-files
+        uses: tj-actions/changed-files@v13
+      - name: List all changed files
         run: |
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
-          echo "::set-output name=txt::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .txt$ | xargs)"
-  appendtext:
-    runs-on: ubuntu-latest
-    # require the first job to have ran
-    needs: changedfiles
-    # only run there are changed files
-    if: ${{needs.changedfiles.outputs.txt}}
-    steps:
-      - name: echo changed files
-        run: echo ${{needs.changedfiles.outputs.txt}}
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
