@@ -23,8 +23,8 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-        with:
-           fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+#         with:
+#            fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
           
 #       - name: Get changed files
 #         id: changed-files
@@ -48,7 +48,8 @@ jobs:
         id: Transform
 #         if: ${{ steps.translator.outputs.has-new-translations }} == 'true'
         run: |
-          echo "Processing changed file list: '${{ steps.changes.outputs.txt }}'"
+          echo "Modified file list: '${{ steps.changes.outputs.all }}'"
+          echo "Modified text file list: '${{ steps.changes.outputs.txt }}'"
           input_files="${{ steps.changes.outputs.txt }}"
           echo $input_files
           for input_file in $input_files; do echo "Processing ${input_file}..."; ./scripts/base64encode.sh $input_file; done
