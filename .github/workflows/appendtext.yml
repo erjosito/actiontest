@@ -4,14 +4,14 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
 on:
-  pull_request:
-    branches: [ master ]
-    paths:
-    - '**.txt' # only take action when *.txt files change
-#   push:
+#   pull_request:
 #     branches: [ master ]
 #     paths:
 #     - '**.txt' # only take action when *.txt files change
+  push:
+    branches: [ master ]
+    paths:
+    - '**.txt' # only take action when *.txt files change
   workflow_dispatch:
 
 # Alternative approach in https://dev.to/scienta/get-changed-files-in-github-actions-1p36
@@ -40,8 +40,8 @@ jobs:
       - name: Get changed files
         id: changes
         run: |
-          echo "all=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)" >> $GITHUB_OUTPUT
-          echo "txt=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .txt$ | xargs)" >> $GITHUB_OUTPUT
+          echo "all=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.push.base.sha }} ${{ github.sha }} | xargs)" >> $GITHUB_OUTPUT
+          echo "txt=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.push.base.sha }} ${{ github.sha }} | grep .txt$ | xargs)" >> $GITHUB_OUTPUT
       
       - name: Work with the list of modified files
         id: transform
