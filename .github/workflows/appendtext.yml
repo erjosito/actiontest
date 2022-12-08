@@ -43,9 +43,8 @@ jobs:
           echo "all=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)" >> $GITHUB_OUTPUT
           echo "txt=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .txt$ | xargs)" >> $GITHUB_OUTPUT
       
-      # To correct some JSON changes introduce by the translation
       - name: Work with the list of modified files
-        id: Transform
+        id: transform
 #         if: ${{ steps.translator.outputs.has-new-translations }} == 'true'
         run: |
           echo "Modified file list: '${{ steps.changes.outputs.all }}'"
@@ -53,4 +52,12 @@ jobs:
           echo "Calculating here the modified text file list: '$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }}  | grep .txt$ | xargs)'"
           input_files="${{ steps.changes.outputs.txt }}"
           echo $input_files
-          for input_file in $input_files; do echo "Processing ${input_file}..."; sh ./scripts/base64encode.sh $input_file; done
+          for input_file in $input_files; do echo "Processing ${input_file}..."; echo "done_something=yes" >> $GITHUB_OUTPUT sh ./scripts/base64encode.sh $input_file; done
+          
+      # Create the PR
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v3.10.1
+        if: ${{ steps.transform.outputs.done_something }} == 'yes'
+        with:
+          title: 'Automatic processing of ${{ steps.changes.outputs.txt }}'
+          body: 'Processed changed files ${{ steps.changes.outputs.txt }}'
