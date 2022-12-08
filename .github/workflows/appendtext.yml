@@ -38,7 +38,7 @@ jobs:
           
       # Get list of files that have been changed
       - id: files
-        uses: jitterbit/get-changed-files@v1
+        uses: masesgroup/retrieve-changed-files@v2
       
       # Process the changed files
       - name: Work with the list of modified files
