@@ -39,13 +39,14 @@ jobs:
       - name: Get changed files
         id: changes
         run: |
-          echo "{set-output name=all}=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)" >> $GITHUB_STATE
-          echo "{set-output name=json}=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .txt$ | xargs)" >> $GITHUB_STATE
+          echo "{all}=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)" >> $GITHUB_OUTPUT
+          echo "{txt}=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .txt$ | xargs)" >> $GITHUB_OUTPUT
       
       # To correct some JSON changes introduce by the translation
       - name: Transform JSON files
         id: Transform
 #         if: ${{ steps.translator.outputs.has-new-translations }} == 'true'
         run: |
-          inputFiles="${steps.changes.outputs.txt}"
-          for inputFile in $inputFiles; do ./scripts/base64encode.sh $inputFile; done
+          input_files="${steps.changes.outputs.txt}"
+          echo $input_files
+          for input_file in $input_files; do echo "Processing ${input_file}..."; ./scripts/base64encode.sh $input_file; done
