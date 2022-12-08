@@ -55,5 +55,5 @@ jobs:
         uses: peter-evans/create-pull-request@v3.10.1
         if: ${{ steps.transform.outputs.done_something }} == 'yes'
         with:
-          title: 'Automatic processing of ${{ steps.changes.outputs.txt }}'
-          body: 'Processed changed files ${{ steps.changes.outputs.txt }}'
+          title: 'Automatic processing of ${{ steps.files.outputs.all }}'
+          body: 'Processed changed files ${{ steps.files.outputs.all }}'
