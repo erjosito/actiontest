@@ -8,10 +8,10 @@ on:
     branches: [ master ]
     paths:
     - '**.txt' # only take action when *.txt files change
-  push:
-    branches: [ master ]
-    paths:
-    - '**.txt' # only take action when *.txt files change
+#   push:
+#     branches: [ master ]
+#     paths:
+#     - '**.txt' # only take action when *.txt files change
   workflow_dispatch:
 
 # Alternative approach in https://dev.to/scienta/get-changed-files-in-github-actions-1p36
