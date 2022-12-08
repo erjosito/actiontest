@@ -42,7 +42,15 @@ jobs:
         run: |
           echo "all=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)" >> $GITHUB_OUTPUT
           echo "txt=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .txt$ | xargs)" >> $GITHUB_OUTPUT
-      
+
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+      - id: do
+        run: |
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            echo "Do something with ${changed_file}."
+          done
+
       - name: Work with the list of modified files
         id: transform
 #         if: ${{ steps.translator.outputs.has-new-translations }} == 'true'
