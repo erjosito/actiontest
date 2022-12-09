@@ -43,6 +43,10 @@ jobs:
       # Process the changed files
       - name: Work with the list of modified files
         id: transform
+        env:
+          AZURE_TRANSLATOR_SUBSCRIPTION_KEY: ${{ secrets.AZURE_TRANSLATOR_SUBSCRIPTION_KEY }}
+          AZURE_TRANSLATOR_ENDPOINT: ${{ secrets.AZURE_TRANSLATOR_ENDPOINT }}
+          AZURE_TRANSLATOR_REGION: ${{ secrets.AZURE_TRANSLATOR_REGION }}
         run: |
           for input_file in ${{ steps.files.outputs.all }}; do 
             input_file_extension=${input_file: -7}
