@@ -3,65 +3,18 @@ name: AppendText
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
-on:
-#   pull_request:
-#     branches: [ master ]
-#     paths:
-#     - '**.txt' # only take action when *.txt files change
-  push:
-    branches: [ master ]
-    paths:
-    - '**.en.json' # only take action when *.en.json files change
-  workflow_dispatch:
-
-# Alternative approach in https://dev.to/scienta/get-changed-files-in-github-actions-1p36
+on: [push]
 
 jobs:
-  modifyfiles:
-    runs-on: ubuntu-latest  # windows-latest | macos-latest
-    name: Test changed-files
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job to say hello
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
-#         with:
-#            fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
-          
-#       - name: Get changed files
-#         id: changed-files
-#         uses: tj-actions/changed-files@v13
-        
-#       - name: List all changed files
-#         run: |
-#           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-#             echo "$file was changed"
-#           done
-          
-      # Get list of files that have been changed
-      - id: files
-        uses: masesgroup/retrieve-changed-files@v2
-      
-      # Process the changed files
-      - name: Work with the list of modified files
-        id: transform
-        env:
-          AZURE_TRANSLATOR_SUBSCRIPTION_KEY: ${{ secrets.AZURE_TRANSLATOR_SUBSCRIPTION_KEY }}
-          AZURE_TRANSLATOR_ENDPOINT: ${{ secrets.AZURE_TRANSLATOR_ENDPOINT }}
-          AZURE_TRANSLATOR_REGION: ${{ secrets.AZURE_TRANSLATOR_REGION }}
-        run: |
-          for input_file in ${{ steps.files.outputs.all }}; do 
-            input_file_extension=${input_file: -7}
-            if [[ "$input_file_extension" == "en.json" ]]; then
-              echo "Processing ${input_file}..."
-              echo "done_something=yes" >> $GITHUB_OUTPUT
-              # sh ./scripts/base64encode.sh $input_file
-              python3 ./scripts/translate.py --input-file $input_file
-            fi
-          done
-          
-      # Create the PR
-      - name: Create pull request
-        uses: peter-evans/create-pull-request@v3.10.1
-        if: ${{ steps.transform.outputs.done_something }} == 'yes'
+      - name: Hello world action step
+        id: hello
+        uses: erjosito/review-checklist-lint@v2
         with:
-          title: 'Automatic processing of ${{ steps.files.outputs.all }}'
-          body: 'Processed changed files ${{ steps.files.outputs.all }}'
+          who-to-greet: 'Mona the Octocat'
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "The time was ${{ steps.hello.outputs.time }}"
