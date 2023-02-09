@@ -1,4 +1,4 @@
-name: AppendText
+name: Test action
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Hello world action step
         id: hello
-        uses: erjosito/review-checklist-lint@v2
+        uses: erjosito/review-checklist-lint@v1
         with:
           who-to-greet: 'Mona the Octocat'
       # Use the output from the `hello` step
