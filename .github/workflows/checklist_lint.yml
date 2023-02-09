@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
       - name: JSON Checklist Lint
         id: checklistlint
-        uses: erjosito/review-checklist-lint@v0.31
+        uses: erjosito/review-checklist-lint@v0.32
         with:
           language: 'en'
       # Use the output from the lint step
