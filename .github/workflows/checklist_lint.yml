@@ -12,9 +12,9 @@ on:
     - master
 
 jobs:
-  hello_world_job:
+  review_linter:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Review Checklist Linter
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
