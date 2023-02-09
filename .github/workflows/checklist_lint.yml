@@ -4,8 +4,12 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
 on:
-  [push]
-  [pull_request]
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
 
 jobs:
   hello_world_job:
