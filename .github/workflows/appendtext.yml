@@ -3,18 +3,24 @@ name: Test action
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   
-on: [push]
+on:
+  [push]
+  [pull_request]
 
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
-      - name: Hello world action step
-        id: hello
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: JSON Checklist Lint
+        id: checklistlint
         uses: erjosito/review-checklist-lint@v1
         with:
-          who-to-greet: 'Mona the Octocat'
+          language: 'en'
       # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+      - name: Get the output
+        run: echo "${{ steps.checklistlint.outputs.number_of_checklists }} checklists found..."
