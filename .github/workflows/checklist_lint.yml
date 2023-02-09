@@ -22,9 +22,9 @@ jobs:
           fetch-depth: 0
       - name: JSON Checklist Lint
         id: checklistlint
-        uses: erjosito/review-checklist-lint@v0.1
+        uses: erjosito/review-checklist-lint@v0.2
         with:
           language: 'en'
-      # Use the output from the `hello` step
+      # Use the output from the lint step
       - name: Get the output
         run: echo "${{ steps.checklistlint.outputs.number_of_checklists }} checklists found..."
