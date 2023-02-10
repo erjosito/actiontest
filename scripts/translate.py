@@ -84,7 +84,7 @@ def translate_object(checklist_object, language):
     translated_object = checklist_object.copy()
     for (k, v) in translated_object.items():
         if isinstance(v, list):
-            translated_items = ()
+            translated_items = []
             for list_item in v:
                 translated_items.append(translate_object(list_item, language))
             translated_object[k] = translated_items
@@ -102,8 +102,7 @@ if args.verbose:
     print("DEBUG: Starting translations for languages", str(translate_languages))
 
 for using_language in translate_languages:
-    if args.verbose:
-        print("DEBUG: Starting translation to", using_language)
+    print("INFO: Starting translation to", using_language)
     translated_checklist = translate_object(checklist, using_language)
     # If no output file was specified, use the input file, and append the language as extension before .json
     if not args.file_name_out:
