@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
       - name: JSON Checklist Lint
         id: checklistlint
-        uses: erjosito/review-checklist-lint@v0.37
+        uses: erjosito/review-checklist-lint@v0.38
         with:
           file_extension: 'en.json'
           key_name: 'guid'
