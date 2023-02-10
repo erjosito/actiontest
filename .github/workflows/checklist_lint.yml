@@ -1,0 +1,33 @@
+name: Test action
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  review_linter:
+    runs-on: ubuntu-latest
+    name: Review Checklist Linter
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: JSON Checklist Lint
+        id: checklistlint
+        uses: erjosito/review-checklist-lint@v0.40
+        with:
+          file_extension: 'en.json'
+          key_name: 'guid'
+          criteria_key: '.metadata.state'
+          criteria_value: 'GA'
+      # Use the output from the lint step
+      - name: Get the output
+        run: echo "${{ steps.checklistlint.outputs.number_of_checklists }} checklists found..."
