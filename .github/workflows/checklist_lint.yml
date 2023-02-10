@@ -22,9 +22,12 @@ jobs:
           fetch-depth: 0
       - name: JSON Checklist Lint
         id: checklistlint
-        uses: erjosito/review-checklist-lint@v0.34
+        uses: erjosito/review-checklist-lint@v0.36
         with:
-          language: 'en'
+          file_extension: 'en.json'
+          key_name: 'guid'
+          criteria_key: '.metadata.state'
+          criteria_value: 'GA'
       # Use the output from the lint step
       - name: Get the output
         run: echo "${{ steps.checklistlint.outputs.number_of_checklists }} checklists found..."
